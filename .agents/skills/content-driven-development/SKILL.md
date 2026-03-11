@@ -275,6 +275,21 @@ Expected: `200`
 
 **What to do:**
 
+If you changed component model sources, regenerate aggregate JSON first:
+
+```bash
+npm run build:json
+```
+
+Run this command whenever you modify:
+- `models/_*.json`
+- `blocks/**/_*.json`
+
+Then verify aggregate outputs include your changes:
+- `component-definition.json`
+- `component-models.json`
+- `component-filters.json`
+
 ```bash
 npm run lint
 ```

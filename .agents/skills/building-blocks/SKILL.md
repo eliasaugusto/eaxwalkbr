@@ -216,6 +216,21 @@ main .my-block.dark {
 
 **After implementation is complete, invoke the testing-blocks skill.**
 
+Before handing off to testing, sync component model aggregates if you touched model source files:
+
+```bash
+npm run build:json
+```
+
+Run this when changing:
+- `models/_*.json`
+- `blocks/**/_*.json`
+
+Confirm output files are updated when expected:
+- `component-definition.json`
+- `component-models.json`
+- `component-filters.json`
+
 The testing-blocks skill will guide you through:
 - Browser testing (functionality, responsive behavior across viewports)
 - Linting and fixing issues

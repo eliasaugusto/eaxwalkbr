@@ -75,6 +75,10 @@ git diff --staged
 - What files were modified?
 - What type of change is this? (new block, bug fix, feature, styling, refactor)
 - What is the test content URL? (from CDD workflow)
+- If `models/_*.json` or `blocks/**/_*.json` changed, verify `npm run build:json` was run and aggregate files were updated as needed:
+  - `component-definition.json`
+  - `component-models.json`
+  - `component-filters.json`
 
 **For PR Review (PR number provided):**
 
