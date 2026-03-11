@@ -1,0 +1,38 @@
+.image-tile > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.image-tile > ul > li {
+  border: 1px solid #dadada;
+  background-color: var(--background-color);
+  overflow: hidden;
+}
+
+.image-tile .image-tile-image {
+  line-height: 0;
+}
+
+.image-tile .image-tile-image img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.image-tile .image-tile-title {
+  padding: 12px 16px 16px;
+}
+
+.image-tile .image-tile-title h1,
+.image-tile .image-tile-title h2,
+.image-tile .image-tile-title h3,
+.image-tile .image-tile-title h4,
+.image-tile .image-tile-title h5,
+.image-tile .image-tile-title h6 {
+  margin: 0;
+  font-size: var(--heading-font-size-xs);
+}
