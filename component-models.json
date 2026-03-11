@@ -214,5 +214,23 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "testimonial-item",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "quote",
+        "label": "Quote",
+        "valueType": "string",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "author",
+        "label": "Author",
+        "valueType": "string"
+      }
+    ]
   }
 ]

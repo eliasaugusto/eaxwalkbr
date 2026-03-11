@@ -1,0 +1,41 @@
+.testimonial > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 24px;
+}
+
+.testimonial > ul > li {
+  padding: 24px;
+  border: 1px solid #dadada;
+  background-color: var(--background-color);
+}
+
+.testimonial blockquote {
+  margin: 0;
+  font-size: var(--body-font-size-s);
+  line-height: 1.5;
+}
+
+.testimonial blockquote p:first-child {
+  margin-top: 0;
+}
+
+.testimonial blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.testimonial cite {
+  display: block;
+  margin-top: 16px;
+  font-style: normal;
+  font-weight: 600;
+  color: var(--dark-color);
+}
+
+@media (width >= 900px) {
+  .testimonial > ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
