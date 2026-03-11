@@ -1,35 +1,25 @@
 # Build Component Guide
 
-Este guia mostra o passo a passo para criar um novo componente (bloco) neste projeto AEM XWalk/Edge Delivery.
+A practical guide to creating a new block in this AEM XWalk/EDS project.
 
-## 1) Pre requisitos
+## 1) Prerequisites
 
-- Node.js instalado (versao compativel com o projeto)
-- Dependencias instaladas:
+- Node.js installed
+- Dependencies installed
 
 ```sh
 npm i
 ```
 
-## 2) Entenda a arquitetura de componentes
+## 2) Minimum Block Structure
 
-Neste projeto, um componente de bloco normalmente tem 3 partes:
+Each block should include:
 
-- `blocks/<nome>/<nome>.js`: logica de decoracao do bloco
-- `blocks/<nome>/<nome>.css`: estilos do bloco
-- `blocks/<nome>/_<nome>.json`: definicao para authoring (definitions/models/filters)
+- `blocks/<name>/<name>.js` (decorate logic)
+- `blocks/<name>/<name>.css` (styles)
+- `blocks/<name>/_<name>.json` (definitions/models/filters)
 
-Os JSON agregadores sao gerados por build:
-
-- `component-definition.json`
-- `component-models.json`
-- `component-filters.json`
-
-Importante: prefira editar os fontes em `blocks/*/_*.json` e `models/*`. Depois rode `npm run build:json`.
-
-## 3) Criar a pasta do novo bloco
-
-Exemplo de bloco chamado `testimonial`:
+Example:
 
 ```text
 blocks/
@@ -39,18 +29,15 @@ blocks/
     testimonial.js
 ```
 
-## 4) Criar o JS do bloco
+## 3) Block JS
 
-Crie `blocks/testimonial/testimonial.js` com um `decorate(block)`.
-
-Exemplo inicial:
+In `<name>.js`, export `decorate(block)`.
 
 ```js
 export default function decorate(block) {
-  const rows = [...block.children];
   const ul = document.createElement('ul');
 
-  rows.forEach((row) => {
+  [...block.children].forEach((row) => {
     const li = document.createElement('li');
     while (row.firstElementChild) li.append(row.firstElementChild);
     ul.append(li);
@@ -60,11 +47,9 @@ export default function decorate(block) {
 }
 ```
 
-## 5) Criar o CSS do bloco
+## 4) Block CSS
 
-Crie `blocks/testimonial/testimonial.css`.
-
-Exemplo inicial:
+Use the block class namespace to avoid global style conflicts.
 
 ```css
 .testimonial > ul {
@@ -78,19 +63,19 @@ Exemplo inicial:
 .testimonial > ul > li {
   border: 1px solid #dadada;
   padding: 16px;
-  background: var(--background-color);
+  background-color: var(--background-color);
 }
 ```
 
-## 6) Criar o _json de authoring
+## 5) Authoring JSON (_<name>.json)
 
-Crie `blocks/testimonial/_testimonial.json` com:
+The file should declare:
 
-- `definitions`: como o componente aparece na paleta do editor
-- `models`: campos editaveis
-- `filters`: composicao interna (opcional)
+- `definitions`: items shown in the editor component palette
+- `models`: editable fields
+- `filters`: internal composition rules (when applicable)
 
-Exemplo:
+Recommended pattern for item-based blocks (same behavior as cards/testimonial):
 
 ```json
 {
@@ -104,7 +89,22 @@ Exemplo:
             "resourceType": "core/franklin/components/block/v1/block",
             "template": {
               "name": "Testimonial",
-              "model": "testimonial"
+              "filter": "testimonials"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Testimonial Item",
+      "id": "testimonial-item",
+      "plugins": {
+        "xwalk": {
+          "page": {
+            "resourceType": "core/franklin/components/block/v1/block/item",
+            "template": {
+              "name": "Testimonial Item",
+              "model": "testimonial-item"
             }
           }
         }
@@ -113,84 +113,106 @@ Exemplo:
   ],
   "models": [
     {
-      "id": "testimonial",
+      "id": "testimonial-item",
       "fields": [
-        {
-          "component": "text",
-          "name": "author",
-          "label": "Author",
-          "valueType": "string"
-        },
         {
           "component": "richtext",
           "name": "quote",
           "label": "Quote",
           "valueType": "string",
           "value": ""
+        },
+        {
+          "component": "text",
+          "name": "author",
+          "label": "Author",
+          "valueType": "string"
         }
       ]
     }
   ],
-  "filters": []
+  "filters": [
+    {
+      "id": "testimonials",
+      "components": [
+        "testimonial-item"
+      ]
+    }
+  ]
 }
 ```
 
-## 7) Gerar JSON consolidado
+Important rule:
 
-Rode:
+- `section` must reference the block `id` (`testimonial`), not the internal filter id (`testimonials`).
+
+## 6) Update Section Composition
+
+Ensure the block is allowed in the `section` filter in `models/_section.json`:
+
+```json
+{
+  "id": "section",
+  "components": ["text", "image", "button", "title", "hero", "cards", "columns", "fragment", "testimonial"]
+}
+```
+
+## 7) Generate Consolidated JSON
+
+Edit source files and regenerate consolidated outputs:
 
 ```sh
 npm run build:json
 ```
 
-Isso atualiza automaticamente:
+Generated files:
 
 - `component-definition.json`
 - `component-models.json`
 - `component-filters.json`
 
-## 8) Validar codigo
-
-Rode lint:
+## 8) Technical Validation
 
 ```sh
 npm run lint
 ```
 
-Se quiser auto-fix:
+If needed:
 
 ```sh
 npm run lint:fix
 ```
 
-## 9) Testar no ambiente local/preview
+## 9) Functional Validation in EDS
 
-Fluxo recomendado:
+In EDS, the final HTML depends on authoring. Therefore:
 
-1. Subir/proxy local conforme processo do projeto (AEM CLI).
-2. Abrir a pagina com Sidekick/preview.
-3. Inserir o bloco no authoring.
-4. Preencher campos do model.
-5. Validar renderizacao, responsividade e acessibilidade.
+- Local validation helps with decorate logic and CSS
+- Final validation must happen in Author/Preview
 
-## 10) Checklist rapido
+Recommended flow:
 
-- Pasta do bloco criada em `blocks/<nome>`
-- JS com `export default function decorate(block)`
-- CSS com namespace `. <nome>` (ex.: `.testimonial`)
-- `_nome.json` com `definitions/models/filters`
-- `npm run build:json` executado
-- `npm run lint` sem erros
-- Bloco aparece no editor e renderiza corretamente
+1. Run local proxy for quick iteration.
+2. Push changes and wait for content/code sync.
+3. Open Universal Editor.
+4. Insert the block inside a Section.
+5. Validate rendering, responsiveness, and accessibility in preview.
 
-## Erros comuns
+## 10) Quick Checklist
 
-- Editar direto os arquivos `component-*.json` e perder alteracoes no proximo build.
-- Esquecer `build:json` e nao ver o componente no editor.
-- Definir `id` diferente entre `definitions` e `models`.
-- Usar estrutura HTML no JS sem considerar o markup gerado pelo authoring.
-- Nao usar classes com namespace do bloco e causar conflito de estilo.
+- Block folder created in `blocks/<name>`
+- `export default function decorate(block)` implemented
+- CSS scoped with the block namespace
+- `_<name>.json` includes `definitions/models/filters`
+- `models/_section.json` allows the block
+- `npm run build:json` executed
+- `npm run lint` passes without errors
+- Block is visible in the editor and can be inserted into a Section
 
----
+## Common Pitfalls
 
-Se quiser, o proximo passo pode ser criar um bloco real (ex.: `testimonial`) com JS/CSS/_JSON prontos neste repositorio.
+- Editing `component-*.json` directly (build will overwrite)
+- Forgetting to run `npm run build:json`
+- Pointing `section` to an internal filter instead of the block id
+- ID mismatch across `definitions`, `models`, and `filters`
+- Assuming local validation replaces Author/Preview validation
