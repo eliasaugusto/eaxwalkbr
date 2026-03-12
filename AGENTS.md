@@ -4,16 +4,16 @@ This project is a website built with Edge Delivery Services in Adobe Experience 
 
 ## Skills
 
-You have access to a set of skills in .claude/skills. Each skill consists of a SKILL.md file, and other files such as scripts and resources, which are referenced from there.
+You have access to a set of skills in .agents/skills. Each skill consists of a SKILL.md file, and other files such as scripts and resources, which are referenced from there.
 
 **YOU ARE REQUIRED TO USE THESE SKILLS TO ACCOMPLISH DEVELOPMENT TASKS. FAILING TO DO SO WILL RESULT IN WASTED TIME AND CYCLES.**
 
 ### How Skills Work
 
-Each skill is a directory in `.claude/skills/` with the following structure:
+Each skill is a directory in `.agents/skills/` with the following structure:
 
 ```
-.claude/skills/
+.agents/skills/
   └── {skill-name}/
       ├── SKILL.md        # Main instructions (required)
       ├── scripts/        # Optional supporting scripts

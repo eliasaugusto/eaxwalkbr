@@ -326,7 +326,7 @@ const url = `https://api.example.com?q=${encodeURIComponent(userInput)}`;
 
 ```bash
 # Using the capture-screenshots.js utility
-cd .claude/skills/pr-review/scripts
+cd .agents/skills/code-review/scripts
 npm install
 node capture-screenshots.js <after-url> [before-url] [output-dir] [block-selector]
 
