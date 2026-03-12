@@ -14,9 +14,9 @@ Enable a new or changed block model in Universal Editor and validate the authori
 
 - Block name (kebab-case):
 - Block title:
-- Target container id(s) (section, column, main, custom):
-- Expected insertion point(s) in filters:
-- Fallback rule if container cannot be resolved: fail gate
+- Where should this block appear in UE? (example: section)
+- Where exactly should it be added? (example: add `demo` to the `section` components list)
+- If target location is unclear: stop and ask before implementing
 - UE integration environment:
 
 ## Field Contract
