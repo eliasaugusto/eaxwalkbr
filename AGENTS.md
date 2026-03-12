@@ -30,7 +30,7 @@ The SKILL.md file contains detailed instructions that you must follow exactly as
 
 Always use the following process:
 
-1. **Discovery**: When a new conversation starts, discover available skills by running `./.agents/discover-skills`. This script will show you all available skills with their names, paths, and descriptions without loading everything into context.
+1. **Discovery**: When a new conversation starts, discover available skills.
 
 2. **Selection**: Use each skill based on its name and description when it feels appropriate to do so. Think carefully about all the skills available to you and choose the best ones to use. Note that some skills may reference other skills, so you may need to apply more than one skill to get things done.
 
