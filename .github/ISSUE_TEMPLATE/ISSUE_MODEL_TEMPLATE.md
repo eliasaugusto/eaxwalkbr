@@ -21,6 +21,37 @@ Enable a new or changed block model in Universal Editor and validate the authori
 
 List all fields in authoring order.
 
+Field type options available in this project (use these names in `type`):
+
+| type | Use when | Example |
+|---|---|---|
+| `text` | Short plain text value | title, imageAlt, author |
+| `richtext` | Formatted text (paragraphs, bold, links) | body text, quote |
+| `reference` | Media/content reference (for example image) | image |
+| `aem-content` | Internal content link/reference from AEM | reference, link |
+| `select` | One option from a fixed list | titleType, linkType |
+| `multiselect` | Multiple options from a fixed list | style |
+
+Tip (keep it simple):
+- Prefer `text` for labels and small fields
+- Use `richtext` only when formatting is needed
+- Use `select`/`multiselect` only when options are known in advance
+
+Example field lines:
+
+- name: title
+  type: text
+  required: yes
+  label: Title
+- name: text
+  type: richtext
+  required: no
+  label: Text
+- name: image
+  type: reference
+  required: yes
+  label: Image
+
 - name:
   type:
   required: yes/no
