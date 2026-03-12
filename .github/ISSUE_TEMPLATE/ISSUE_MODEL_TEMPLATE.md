@@ -14,7 +14,9 @@ Enable a new or changed block model in Universal Editor and validate the authori
 
 - Block name (kebab-case):
 - Block title:
-- Scope/container (example: section):
+- Target container id(s) (section, column, main, custom):
+- Expected insertion point(s) in filters:
+- Fallback rule if container cannot be resolved: fail gate
 - UE integration environment:
 
 ## Field Contract
@@ -35,12 +37,15 @@ Field type reference:
 ## Implementation Checklist
 
 - [ ] Model source file created or updated in block folder
-- [ ] Scope/filter source updated (example: section filter)
+- [ ] Container target resolved from issue input
+- [ ] Scope/filter source file mapped and updated (example: section -> models/_section.json)
+- [ ] Post-edit source validation confirms block id in target filter
 - [ ] Aggregates regenerated with `npm run build:json`
 - [ ] Presence validated in:
   - [ ] component-definition.json
   - [ ] component-models.json
   - [ ] component-filters.json
+- [ ] Post-build aggregate validation confirms block id in expected container filter
 - [ ] Lint executed with `npm run lint`
 - [ ] Enablement-only changeset prepared (no full visual/behavior implementation)
 

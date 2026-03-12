@@ -49,7 +49,7 @@ Required parsed values:
 - Block name in kebab-case
 - Block title
 - Field list with type, label, required/optional, and expected order
-- Target availability scope (for example, section)
+- Target container id(s) and expected insertion point(s)
 - Target UE integration environment for validation
 
 If any required value is missing, stop and report exactly what is missing.
@@ -69,6 +69,20 @@ First action:
 1. Read `.github/ISSUE_TEMPLATE/ISSUE_MODEL_TEMPLATE.md`.
 2. Read the GitHub issue URL (if provided) and map issue content to Inputs and Field Contract sections.
 3. Execute technical steps below and update status under the template's checklist sections.
+
+### Container Resolution Rules (Mandatory)
+
+Resolve insertion target before editing any file.
+
+Mapping rules:
+- `section` -> `models/_section.json` filter `id: section`
+- `column` -> filter with `id: column` (typically from block-specific `_*.json` or aggregate source)
+- `main` -> `models/_component-filters.json` filter `id: main`
+- `custom` -> explicit filter id and source file must be provided in issue input
+
+Fail-fast rules:
+- If container id or insertion point is missing, stop and report missing values.
+- If target source file cannot be mapped, stop and report required mapping input.
 
 ### Step 1: Define Authoring Contract
 
@@ -91,6 +105,8 @@ Guidelines:
 - Avoid introducing presentational concerns in model definitions
 - Keep this phase focused on model enablement only
 
+After editing filter source files, immediately re-read the file and confirm block id exists in the target filter. Do not continue if confirmation fails.
+
 ### Step 3: Regenerate Aggregates
 
 Run:
@@ -112,6 +128,10 @@ Minimum checks:
 - Block ID exists in definition/models outputs
 - Block is available in intended filter scope (for example section)
 - Field names appear exactly as defined in model source
+
+Fail-fast validation:
+- If block id is missing from `component-filters.json` expected container after build, stop and mark gate as rejected.
+- If a tool reports corrected/auto-adjusted patch output, re-read the source file and re-validate before proceeding.
 
 ### Step 5: Lint and Fix
 
