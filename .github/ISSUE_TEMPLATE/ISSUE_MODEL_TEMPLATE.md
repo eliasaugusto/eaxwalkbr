@@ -21,22 +21,16 @@ Enable a new or changed block model in Universal Editor and validate the authori
 
 List all fields in authoring order.
 
-Field type reference:
-- See [fields-definition.md](https://github.com/eliasaugusto/eaxwalkbr/blob/main/docks/fields-definition.md)
-
-| order | name | type | required (yes/no) | label |
-|---|---|---|---|---|
-| 1 |  |  |  |  |
-| 2 |  |  |  |  |
-| 3 |  |  |  |  |
-
-Optional example:
-
 | order | name | type | required (yes/no) | label |
 |---|---|---|---|---|
 | 1 | image | reference | yes | Image |
 | 2 | title | text | yes | Title |
 | 3 | text | richtext | no | Text |
+
+Add or remove rows as needed for your block.
+
+Field type reference:
+- See [fields-definition.md](https://github.com/eliasaugusto/eaxwalkbr/blob/main/docks/fields-definition.md)
 
 ## Implementation Checklist
 
