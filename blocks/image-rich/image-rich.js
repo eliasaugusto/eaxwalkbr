@@ -1,24 +1,49 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
+function buildItems(rows) {
+  const oneColRows = rows.every((row) => row.children.length <= 1);
+
+  if (oneColRows && rows.length >= 3) {
+    const items = [];
+
+    for (let i = 0; i < rows.length; i += 3) {
+      items.push({
+        sourceRow: rows[i],
+        imageCol: rows[i]?.children[0],
+        richTextCol: rows[i + 1]?.children[0],
+        textCol: rows[i + 2]?.children[0],
+      });
+    }
+
+    return items;
+  }
+
+  return rows.map((row) => ({
+    sourceRow: row,
+    imageCol: row.children[0],
+    richTextCol: row.children[1],
+    textCol: row.children[2],
+  }));
+}
+
 export default function decorate(block) {
   const ul = document.createElement('ul');
+  const rows = [...block.children];
+  const items = buildItems(rows);
 
-  [...block.children].forEach((row) => {
-    const cols = [...row.children];
-    if (!cols.length) return;
+  items.forEach((item) => {
+    const {
+      sourceRow, imageCol, richTextCol, textCol,
+    } = item;
 
     const li = document.createElement('li');
-    moveInstrumentation(row, li);
-
-    const imageCol = cols[0];
-    const richTextCol = cols[1];
-    const textCol = cols[2];
+    if (sourceRow) moveInstrumentation(sourceRow, li);
 
     const imageWrapper = document.createElement('div');
     imageWrapper.className = 'image-rich-image';
 
-    const picture = imageCol.querySelector('picture');
+    const picture = imageCol?.querySelector('picture');
     const img = picture?.querySelector('img');
     if (img) {
       const optimizedPic = createOptimizedPicture(img.src, img.alt || '', false, [{ width: '750' }]);
@@ -53,8 +78,10 @@ export default function decorate(block) {
       }
     }
 
-    li.append(imageWrapper, contentWrapper);
-    ul.append(li);
+    if (imageWrapper.childElementCount || contentWrapper.textContent.trim()) {
+      li.append(imageWrapper, contentWrapper);
+      ul.append(li);
+    }
   });
 
   block.replaceChildren(ul);
