@@ -7,6 +7,12 @@ description: Enable and validate a new block model in Universal Editor before de
 
 This skill implements the first phase of a staged block workflow for AEM Edge Delivery Services: make the block available in Universal Editor (UE), validate authoring contract quality, and capture observed HTML before visual/design and full JS/CSS implementation.
 
+Primary input source:
+- GitHub issue created from `.github/ISSUE_TEMPLATE/ISSUE_MODEL_TEMPLATE.md`
+
+Fallback input source:
+- Manually provided values in chat when no issue URL is available
+
 Canonical process artifact:
 - `.github/ISSUE_TEMPLATE/ISSUE_MODEL_TEMPLATE.md`
 
@@ -34,12 +40,19 @@ Do NOT use this skill for:
 
 ## Inputs Required
 
-Before starting, gather the values required by the issue template:
+Before starting, gather the values required by the issue template.
+
+Preferred mode (GitHub-first):
+- Read a GitHub issue URL and parse values from the issue body.
+
+Required parsed values:
 - Block name in kebab-case
 - Block title
 - Field list with type, label, required/optional, and expected order
 - Target availability scope (for example, section)
 - Target UE integration environment for validation
+
+If any required value is missing, stop and report exactly what is missing.
 
 ## Outputs Required
 
@@ -54,7 +67,7 @@ This skill is done only when all outputs exist:
 
 First action:
 1. Read `.github/ISSUE_TEMPLATE/ISSUE_MODEL_TEMPLATE.md`.
-2. Map task data to Inputs and Field Contract sections.
+2. Read the GitHub issue URL (if provided) and map issue content to Inputs and Field Contract sections.
 3. Execute technical steps below and update status under the template's checklist sections.
 
 ### Step 1: Define Authoring Contract
