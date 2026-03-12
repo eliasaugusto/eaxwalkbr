@@ -22,7 +22,7 @@ Enable a new or changed block model in Universal Editor and validate the authori
 List all fields in authoring order.
 
 Field type reference:
-- See [fields-definition.md](fields-definition.md)
+- See [fields-definition.md](../../fields-definition.md)
 
 - name:
   type:
