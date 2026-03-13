@@ -14,8 +14,9 @@ Enable a new or changed block model in Universal Editor and validate the authori
 
 - Block name (kebab-case):
 - Block title:
-- Where should this block appear in UE? (example: section)
-- Where exactly should it be added? (example: add `demo` to the `section` components list)
+- UE catalog group:
+- Allowed containers:
+- Allowed child components (optional):
 - If target location is unclear: stop and ask before implementing
 - UE integration environment:
 
