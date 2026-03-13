@@ -8,13 +8,13 @@ description: Enable and validate a new block model in Universal Editor before de
 This skill implements the first phase of a staged block workflow for AEM Edge Delivery Services: make the block available in Universal Editor (UE), validate authoring contract quality, and capture observed HTML before visual/design and full JS/CSS implementation.
 
 Primary input source:
-- GitHub issue created from `.github/ISSUE_TEMPLATE/issue-model-template.md`
+- GitHub issue created from `.github/ISSUE_TEMPLATE/ISSUE_MODEL_TEMPLATE.md`
 
 Fallback input source:
 - Manually provided values in chat when no issue URL is available
 
 Canonical process artifact:
-- `.github/ISSUE_TEMPLATE/issue-model-template.md`
+- `.github/ISSUE_TEMPLATE/ISSUE_MODEL_TEMPLATE.md`
 
 Use the issue template above as the single source of truth for:
 - Inputs
@@ -66,7 +66,7 @@ This skill is done only when all outputs exist:
 ## Workflow
 
 First action:
-1. Read `.github/ISSUE_TEMPLATE/issue-model-template.md`.
+1. Read `.github/ISSUE_TEMPLATE/ISSUE_MODEL_TEMPLATE.md`.
 2. Read the GitHub issue URL (if provided) and map issue content to Inputs and Field Contract sections.
 3. Execute technical steps below and update status under the template's checklist sections.
 
@@ -169,7 +169,7 @@ If rejected, document gaps and repeat from the appropriate step.
 
 ## Definition of Done (Gate 1)
 
-Use the Definition of Done section from `.github/ISSUE_TEMPLATE/issue-model-template.md`.
+Use the Definition of Done section from `.github/ISSUE_TEMPLATE/ISSUE_MODEL_TEMPLATE.md`.
 
 ## Handoff to Next Phase
 
