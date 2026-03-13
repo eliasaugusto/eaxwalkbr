@@ -8,7 +8,7 @@ description: Run Gate 1 from a GitHub issue URL using the ue-model-enablement-ga
 Use this prompt to execute the first project phase (model enablement) with GitHub issue data as source of truth.
 
 Canonical template:
-- .github/issue_template/issue-model-template.md
+- .github/ISSUE_TEMPLATE/issue-model-template.md
 
 ## Prompt
 
@@ -16,14 +16,14 @@ You are working in an AEM Edge Delivery Services project.
 
 Using Skill: ue-model-enablement-gate
 
-Use .github/issue_template/issue-model-template.md as the canonical checklist and Definition of Done.
+Use .github/ISSUE_TEMPLATE/issue-model-template.md as the canonical checklist and Definition of Done.
 Do not create a parallel checklist. Execute Gate 1 based on the template fields and checklist sections.
 
 ### Inputs
 - GitHub issue URL: {{github_issue_url}}
 
 ### Required execution
-1. Read .github/issue_template/issue-model-template.md.
+1. Read .github/ISSUE_TEMPLATE/issue-model-template.md.
 2. Read the provided GitHub issue URL and parse Inputs + Field Contract from the issue body.
 3. Resolve target container id(s) and insertion point(s) from issue input before editing files.
 4. If any required value is missing in the issue, stop and report missing fields clearly.
