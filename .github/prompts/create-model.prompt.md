@@ -1,5 +1,5 @@
 ---
-title: create-model
+name: create-model
 description: Run Gate 1 from a GitHub issue URL using the ue-model-enablement-gate skill and the canonical ISSUE_MODEL_TEMPLATE.
 ---
 
