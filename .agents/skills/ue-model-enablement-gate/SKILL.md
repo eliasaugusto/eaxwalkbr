@@ -50,7 +50,6 @@ Required parsed values:
 - Block title
 - Field list with type, label, required/optional, and expected order
 - Target container id(s) and expected insertion point(s)
-- Target UE integration environment for validation
 
 If any required value is missing, stop and report exactly what is missing.
 

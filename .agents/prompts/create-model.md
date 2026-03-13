@@ -37,7 +37,7 @@ Return:
 1. Files changed
 2. Commands executed
 3. Checklist status copied by section name from ISSUE_MODEL_TEMPLATE
-4. Parsed values from issue (block name, container ids, insertion points, fields, environment)
+4. Parsed values from issue (block name, container ids, insertion points, fields)
 5. Insertion decision log (target container -> source file -> validation result)
 6. Remaining manual actions in UE (if any)
 7. Final Gate 1 status: Approved or Rejected (with reason)

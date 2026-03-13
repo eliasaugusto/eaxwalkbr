@@ -18,7 +18,6 @@ Enable a new or changed block model in Universal Editor and validate the authori
 - Allowed containers:
 - Allowed child components (optional):
 - If target location is unclear: stop and ask before implementing
-- UE integration environment:
 
 ## Field Contract
 
