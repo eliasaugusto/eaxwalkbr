@@ -3,6 +3,10 @@
         "/^npx eslint blocks/demo/demo\\.js 2>&1 \\| Where-Object \\{ \\$_ -notmatch \"baseline\" \\}$/": {
             "approve": true,
             "matchCommandLine": true
+        },
+        "/^npx stylelint \"blocks/demo/demo\\.css\" 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
         }
     }
 }

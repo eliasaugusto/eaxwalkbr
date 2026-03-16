@@ -1,12 +1,11 @@
 .demo {
   display: flex;
   flex-direction: column;
-  gap: 0;
   overflow: hidden;
 }
 
 .demo .demo-image {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
 }
 
@@ -22,29 +21,31 @@
   flex-direction: column;
   justify-content: center;
   gap: 1.25rem;
-  padding: 2rem 1.5rem;
-  background-color: var(--background-color);
+  padding: 3rem 2rem;
+  background-color: #f5ede4;
 }
 
 .demo .demo-content h2 {
   margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
   font-size: var(--heading-font-size-l);
-  line-height: 1.15;
-  letter-spacing: -0.02em;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: #1a1410;
 }
 
 .demo .demo-text {
-  font-size: var(--body-font-size-m);
-  line-height: 1.6;
-  color: var(--text-color);
-  opacity: 0.85;
+  font-size: var(--body-font-size-xs);
+  line-height: 1.65;
+  color: #2d2520;
 }
 
 @media (width >= 900px) {
   .demo {
     flex-direction: row;
     align-items: stretch;
-    min-height: 420px;
+    min-height: 480px;
   }
 
   .demo .demo-image {
@@ -54,10 +55,16 @@
 
   .demo .demo-content {
     flex: 1;
-    padding: 3rem 2.5rem;
+    padding: 4rem 3.5rem;
+    gap: 1.5rem;
   }
 
   .demo .demo-content h2 {
-    font-size: var(--heading-font-size-xl, var(--heading-font-size-l));
+    font-size: var(--heading-font-size-xl);
+  }
+
+  .demo .demo-text {
+    font-size: var(--body-font-size-s);
+    max-width: 38ch;
   }
 }
