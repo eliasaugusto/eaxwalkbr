@@ -1,0 +1,41 @@
+.demo {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.demo .demo-image img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.demo .demo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.demo .demo-content h2 {
+  margin: 0;
+  font-size: var(--heading-font-size-m);
+}
+
+.demo .demo-text {
+  font-size: var(--body-font-size-m);
+}
+
+@media (width >= 900px) {
+  .demo {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .demo .demo-image {
+    flex: 0 0 50%;
+  }
+
+  .demo .demo-content {
+    flex: 1;
+  }
+}
