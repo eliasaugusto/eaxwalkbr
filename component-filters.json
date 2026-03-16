@@ -17,7 +17,8 @@
       "image-rich",
       "columns",
       "fragment",
-      "testimonial"
+      "testimonial",
+      "demo"
     ]
   },
   {
@@ -39,6 +40,12 @@
       "image",
       "button",
       "title"
+    ]
+  },
+  {
+    "id": "demo-items",
+    "components": [
+      "demo-item"
     ]
   },
   {
