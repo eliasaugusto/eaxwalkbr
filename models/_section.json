@@ -53,7 +53,8 @@
         "columns",
         "fragment",
         "testimonial",
-        "demo"
+        "demo",
+        "promo-grid"
       ]
     }
   ]

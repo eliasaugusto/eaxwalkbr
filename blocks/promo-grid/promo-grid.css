@@ -1,0 +1,45 @@
+.promo-grid > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.promo-grid > ul > li {
+  border: 1px solid #dadada;
+  background: var(--background-color);
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+}
+
+.promo-grid .promo-grid-card-image {
+  line-height: 0;
+}
+
+.promo-grid .promo-grid-card-image picture,
+.promo-grid .promo-grid-card-image img {
+  display: block;
+  width: 100%;
+}
+
+.promo-grid .promo-grid-card-image img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.promo-grid .promo-grid-card-col-1 {
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-s);
+  line-height: 1.2;
+}
+
+.promo-grid .promo-grid-card-col-2 {
+  color: var(--dark-color);
+}
+
+.promo-grid .promo-grid-card-col-4 a {
+  font-weight: 600;
+}
