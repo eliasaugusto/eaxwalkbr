@@ -40,10 +40,16 @@ For container+item blocks, apply the same positional rule inside each item.
 1. Read AGENTS.md and apply project conventions.
 2. Read `blocks/{block_name}/_{block_name}.json` — extract field contract (names, types, order) from the model.
    - If the file does not exist, stop and report: "Model not found. Run /create-model first."
-3. If a design issue URL was provided, fetch it and extract layout and design intent.
+3. If a design issue URL was provided:
+   a. Fetch the issue page HTML.
+   b. Extract all image URLs found in the issue body (look for `<img src="...">` or markdown `![...](url)` patterns, including `private-user-images.githubusercontent.com` signed URLs).
+   c. Fetch each image URL to visually analyze the design: layout, spacing, colors, typography, element proportions.
+   d. Extract any written design intent from the issue text (Layout, Visual elements, Spacing, Variants sections).
+   e. If a reference URL is provided, fetch it and extract design patterns.
+   f. Use ALL gathered visual and textual information as the design spec for the CSS implementation.
 4. Decide architecture from the model file (single model = `template.model`, container+item = `template.filter`).
 5. Generate block JS with positional destructuring exactly aligned to model field order.
-6. Generate block CSS, mobile-first, scoped to block.
+6. Generate block CSS that faithfully implements the observed design: layout, spacing, colors, typography, and responsive behavior.
 7. Run lint validation (`npm run lint`).
 8. Return output HTML contract and final report.
 
