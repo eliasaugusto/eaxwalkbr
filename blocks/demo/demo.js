@@ -14,7 +14,7 @@ export default function decorate(block) {
   moveInstrumentation(imageRow, imageEl);
   if (picture) {
     const img = picture.querySelector('img');
-    const optimizedPic = createOptimizedPicture(img.src, img.alt || '', false, [{ width: '750' }]);
+    const optimizedPic = createOptimizedPicture(img.src, img.alt || '', false, [{ width: '1200' }]);
     moveInstrumentation(img, optimizedPic.querySelector('img'));
     imageEl.append(optimizedPic);
   }

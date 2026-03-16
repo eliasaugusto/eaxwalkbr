@@ -1,0 +1,8 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^npx eslint blocks/demo/demo\\.js 2>&1 \\| Where-Object \\{ \\$_ -notmatch \"baseline\" \\}$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
