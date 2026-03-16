@@ -1,4 +1,4 @@
-﻿---
+---
 name: "Block Definition"
 about: "Define the design intent for a block whose model was already approved in Gate 1"
 title: "BLOCK: <block-name>"
