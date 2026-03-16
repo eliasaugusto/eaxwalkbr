@@ -1,19 +1,17 @@
 ---
 name: create-block
-description: Create a new block from a field contract with agent-decided architecture and deterministic HTML contract.
-argument-hint: <block-name> <field-contract-or-issue-url>
+description: Implement a block (JS + CSS) from an existing model. Reads the field contract from the block JSON file already created in Gate 1.
+argument-hint: <block-name> [issue-url]
 ---
 
 # Create Block
 
-Create a new AEM Edge Delivery block from the provided field contract.
+Implement a block (JS + CSS) for a block whose model already exists from Gate 1.
 
 ## Inputs
 
 - Block name: {{block_name}}
-- Field contract source: {{field_contract_source}}
-- Placement target (optional): {{placement_target}}
-- Constraints (optional): {{constraints}}
+- Design issue URL (optional): {{issue_url}}
 
 ## Prompt
 
@@ -40,14 +38,13 @@ For container+item blocks, apply the same positional rule inside each item.
 
 ### Required execution
 1. Read AGENTS.md and apply project conventions.
-2. Parse and normalize the field contract.
-3. Decide architecture (single model or container + item) with rationale.
-   - Use container + item for ANY block with repeating items (grid, list, carousel, etc.)
-   - Use single model only for blocks that always render a single instance.
-4. Generate model source and placement filter updates.
+2. Read `blocks/{block_name}/_{block_name}.json` — extract field contract (names, types, order) from the model.
+   - If the file does not exist, stop and report: "Model not found. Run /create-model first."
+3. If a design issue URL was provided, fetch it and extract layout and design intent.
+4. Decide architecture from the model file (single model = `template.model`, container+item = `template.filter`).
 5. Generate block JS with positional destructuring exactly aligned to model field order.
 6. Generate block CSS, mobile-first, scoped to block.
-7. Run build and lint validations.
+7. Run lint validation (`npm run lint`).
 8. Return output HTML contract and final report.
 
 ### Required output format
