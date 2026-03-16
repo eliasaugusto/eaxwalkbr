@@ -1,14 +1,42 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 import { moveInstrumentation } from '../../scripts/scripts.js';
 
+const FIELDS_PER_ITEM = 4;
+
+function buildItems(rows) {
+  const oneColRows = rows.every((row) => row.children.length <= 1);
+
+  if (oneColRows && rows.length >= FIELDS_PER_ITEM) {
+    const items = [];
+
+    for (let i = 0; i < rows.length; i += FIELDS_PER_ITEM) {
+      const chunk = rows.slice(i, i + FIELDS_PER_ITEM);
+      if (chunk.length < FIELDS_PER_ITEM) break;
+
+      items.push({
+        sourceRow: chunk[0],
+        cols: chunk.map((row) => row.children[0] || row),
+      });
+    }
+
+    return items;
+  }
+
+  return rows.map((row) => ({
+    sourceRow: row,
+    cols: [...row.children],
+  }));
+}
+
 export default function decorate(block) {
   const ul = document.createElement('ul');
+  const items = buildItems([...block.children]);
 
-  [...block.children].forEach((row) => {
+  items.forEach(({ sourceRow, cols }) => {
     const li = document.createElement('li');
-    moveInstrumentation(row, li);
+    moveInstrumentation(sourceRow, li);
 
-    while (row.firstElementChild) li.append(row.firstElementChild);
+    cols.forEach((col) => li.append(col));
 
     [...li.children].forEach((col, index) => {
       if (col.children.length === 1 && col.querySelector('picture')) {
