@@ -14,12 +14,8 @@
       "title",
       "hero",
       "cards",
-      "image-rich",
       "columns",
-      "fragment",
-      "testimonial",
-      "demo",
-      "promo-grid"
+      "fragment"
     ]
   },
   {
@@ -41,18 +37,6 @@
       "image",
       "button",
       "title"
-    ]
-  },
-  {
-    "id": "demo-items",
-    "components": [
-      "demo-item"
-    ]
-  },
-  {
-    "id": "testimonials",
-    "components": [
-      "testimonial-item"
     ]
   }
 ]

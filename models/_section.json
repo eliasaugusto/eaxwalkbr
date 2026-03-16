@@ -49,12 +49,8 @@
         "title",
         "hero",
         "cards",
-        "image-rich",
         "columns",
-        "fragment",
-        "testimonial",
-        "demo",
-        "promo-grid"
+        "fragment"
       ]
     }
   ]
