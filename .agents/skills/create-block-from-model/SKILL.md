@@ -50,6 +50,63 @@ The agent MUST decide automatically:
 
 Ask follow-up questions only when there is a true ambiguity with major trade-offs.
 
+## UE HTML Contract (read this before writing any decorator)
+
+The Universal Editor **always** serializes a block model to HTML using this exact rule:
+
+> model field[n] → `block.children[n]` → `block.children[n].firstElementChild`
+
+### Single model block
+
+Given a model with fields `[a, b, c, d]` the UE generates:
+
+```html
+<div class="block-name">
+  <div><div><!-- field a value --></div></div>   <!-- index 0 -->
+  <div><div><!-- field b value --></div></div>   <!-- index 1 -->
+  <div><div><!-- field c value --></div></div>   <!-- index 2 -->
+  <div><div><!-- field d value --></div></div>   <!-- index 3 -->
+</div>
+```
+
+### Container + item block
+
+Given a container `parent` and item model with fields `[a, b, c, d]`:
+
+```html
+<div class="parent">
+  <div class="parent-item">
+    <div><div><!-- field a --></div></div>       <!-- index 0 -->
+    <div><div><!-- field b --></div></div>       <!-- index 1 -->
+    <div><div><!-- field c --></div></div>       <!-- index 2 -->
+    <div><div><!-- field d --></div></div>       <!-- index 3 -->
+  </div>
+  <div class="parent-item">
+    <!-- second authored item, same structure -->
+  </div>
+</div>
+```
+
+### Field type → HTML element mapping
+
+| Field type   | HTML content                              |
+|--------------|-------------------------------------------|
+| text         | text node                                 |
+| richtext     | inline HTML (`<strong>`, `<em>`, `<p>`)   |
+| reference    | `<picture>` containing `<img>`            |
+| aem-content  | `<a href="...">` with internal path       |
+| select       | text node (selected value)                |
+| multiselect  | text node (comma-separated selected values)|
+
+### Rules that follow from this contract
+
+1. Never use heuristics or format detection in the decorator — the model defines the contract.
+2. Always destructure `block.children` by **index**, aligned to **model field order**.
+3. Always read the value from `row.firstElementChild` (the inner `<div>`).
+4. For `reference` fields, query `picture` inside `firstElementChild`.
+5. For `aem-content` fields, query `a` inside `firstElementChild`.
+6. For container+item, each item is a child of `block` with class `{parent}-{item-name}`.
+
 ## Decision Heuristics
 
 1. Respect lint constraints first
@@ -59,12 +116,66 @@ Ask follow-up questions only when there is a true ambiguity with major trade-off
 - If the block can be represented clearly with one model and <= max-cells, use single model.
 
 3. Prefer container + item when any is true
-- Repeating item semantics
+- Repeating item semantics (grid, list, carousel, tabs, accordion)
 - Mixed parent settings + item content
 - Cleaner authoring with nested content
 
-4. Keep output deterministic
-- Same input structure should produce same output structure.
+4. Never use single model for repeating items
+- A single model always produces exactly one instance of the field set.
+- If the block needs N cards/items authored by content authors, use container + item.
+
+5. Keep output deterministic
+- Same input structure must produce the same output structure.
+- The decorator must never branch on "is this UE or doc format" — the model IS the format.
+
+## Mandatory Decorator Patterns
+
+These are the ONLY accepted patterns for reading UE-generated fields in a decorator.
+Do NOT use heuristics, `.length` checks, or multi-format detection.
+
+### Single model — positional destructuring
+
+```js
+export default function decorate(block) {
+  // field order must match the model definition exactly
+  const [fieldARow, fieldBRow, fieldCRow, fieldDRow] = [...block.children];
+
+  const fieldA = fieldARow?.firstElementChild;             // text / richtext
+  const fieldB = fieldBRow?.firstElementChild;             // text / richtext
+  const fieldC = fieldCRow?.firstElementChild?.querySelector('picture'); // reference
+  const fieldD = fieldDRow?.firstElementChild?.querySelector('a');       // aem-content
+
+  // build output DOM here
+}
+```
+
+### Container + item — iterate items, positional destructuring inside each
+
+```js
+export default function decorate(block) {
+  [...block.children].forEach((item) => {
+    // field order must match the item model definition exactly
+    const [fieldARow, fieldBRow, fieldCRow, fieldDRow] = [...item.children];
+
+    const fieldA = fieldARow?.firstElementChild;
+    const fieldB = fieldBRow?.firstElementChild;
+    const fieldC = fieldCRow?.firstElementChild?.querySelector('picture');
+    const fieldD = fieldDRow?.firstElementChild?.querySelector('a');
+
+    // build output DOM here
+  });
+}
+```
+
+### Naming rule
+- Name destructuring variables after the **model field name**, not generic names like `col` or `row`.
+- This creates a 1:1 readable mapping between model definition and decorator code.
+
+### What to NEVER do
+- Never use `block.querySelectorAll('div div')` to collect all cells.
+- Never detect format by checking `row.children.length`.
+- Never assume multi-column rows (UE always generates 1 column per row).
+- Never use generic index variable names (`col0`, `c1`, etc.) — use field names.
 
 ## Required Outputs
 

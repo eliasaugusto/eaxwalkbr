@@ -25,14 +25,30 @@ Execute block creation end-to-end using the provided model contract.
 The agent must decide architecture and output HTML contract automatically.
 Do not require UE HTML validation as a prerequisite for implementation.
 
+### Critical constraint: model-aligned decorator
+
+The UE always generates HTML with one row per field, in the **exact same order as the model fields**.
+The decorator MUST use positional destructuring aligned to the model field order.
+
+- `block.children[0]` → model field 0 → named `{field0Name}Row`
+- `block.children[1]` → model field 1 → named `{field1Name}Row`
+- etc.
+
+Variable names in the decorator must match model field names exactly.
+Never use heuristics, format detection, or generic names (`col`, `row0`).
+For container+item blocks, apply the same positional rule inside each item.
+
 ### Required execution
 1. Read AGENTS.md and apply project conventions.
 2. Parse and normalize the field contract.
 3. Decide architecture (single model or container + item) with rationale.
+   - Use container + item for ANY block with repeating items (grid, list, carousel, etc.)
+   - Use single model only for blocks that always render a single instance.
 4. Generate model source and placement filter updates.
-5. Generate block JS/CSS with deterministic output structure.
-6. Run build and lint validations.
-7. Return output HTML contract and final report.
+5. Generate block JS with positional destructuring exactly aligned to model field order.
+6. Generate block CSS, mobile-first, scoped to block.
+7. Run build and lint validations.
+8. Return output HTML contract and final report.
 
 ### Required output format
 Return:
