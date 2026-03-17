@@ -500,6 +500,19 @@ Here's a complete example of a test `.plain.html` file for a hero block:
 
 **IMPORTANT:** If the project is a crosswalk/xwalk project (has `models/_component-definition.json`), the Universal Editor serializes block content differently from document-based authoring. Local `.plain.html` test files MUST follow these rules to match the real UE output.
 
+### Official Documentation References
+
+When in doubt about how the Universal Editor serializes content to HTML, consult these official sources using the **docs-search** skill:
+
+- **Block creation and serialization rules:** https://www.aem.live/developer/universal-editor-blocks — see section "Blocks for AEM authoring and document-based authoring" for the serialization approach and a concrete Teaser example
+- **Content modeling:** https://www.aem.live/developer/component-model-definitions — how to model content and field types
+- **Markup reference:** https://www.aem.live/developer/markup-sections-blocks — general markup, sections, and block structure
+
+You can also verify the real HTML output for any page with content in the CMS by fetching:
+```
+https://main--{repo}--{owner}.aem.page/{path}.plain.html
+```
+
 ### How to detect a crosswalk project
 
 Check if `models/_component-definition.json` exists in the project root.
