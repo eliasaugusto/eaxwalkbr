@@ -38,10 +38,13 @@ main .demo .demo-body h2 {
   margin: 0 0 16px;
 }
 
-main .demo .demo-body p {
+main .demo .demo-description {
   font-size: var(--body-font-size-m);
-  margin: 0;
   color: var(--dark-color);
+}
+
+main .demo .demo-description p {
+  margin: 0;
 }
 
 /* image-right variant */
