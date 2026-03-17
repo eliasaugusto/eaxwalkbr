@@ -7,18 +7,316 @@ description: Project-specific skill for AEM Edge Delivery Services crosswalk (xw
 
 This skill provides project-specific guidance for AEM Edge Delivery Services crosswalk (xwalk) projects that use the Universal Editor (UE) for content authoring.
 
-**Use this skill alongside the Adobe skills** (content-driven-development, building-blocks, etc.) — it supplements them with crosswalk-specific steps.
-
-## When to Use This Skill
-
-- Creating or modifying blocks in a crosswalk project
-- Creating UE component definitions (`_*.json` files)
-- Creating local `.plain.html` test content that matches UE output
-- Understanding how the UE serializes content to HTML
-
 ## How to Detect a Crosswalk Project
 
 Check if `models/_component-definition.json` exists in the project root. If it does, this is a crosswalk project.
+
+## Relationship with CDD (Content Driven Development)
+
+This skill **complements** the Adobe `content-driven-development` (CDD) skill. CDD remains the orchestrator — this skill replaces or supplements specific CDD steps for crosswalk projects.
+
+### CDD Step Mapping
+
+| CDD Step | Crosswalk Behavior |
+|---|---|
+| **Step 0: Create TodoList** | **Unchanged** — use CDD as-is |
+| **Step 1: Start Dev Server** | **Unchanged** — use CDD as-is |
+| **Step 2: Analyze & Plan** | **Supplemented** — invoke analyze-and-plan skill as normal, but also use [Reading Component Model Issues](#reading-component-model-issues) when working from a GitHub issue |
+| **Step 3: Design Content Model** | **Replaced** — instead of designing a table structure, follow [Phase 1: Component Definition](#phase-1-component-definition) to create the UE `_block.json` file |
+| **Step 4: Identify/Create Test Content** | **Replaced** — push model to `main`, create content in the UE, then inspect `.plain.html` for real HTML. Alternatively, create local `.plain.html` test files using [Creating Local Test Content](#creating-local-test-content-for-crosswalk) |
+| **Step 5: Implement** | **Replaced** — instead of invoking building-blocks directly, follow [Phase 2: Block Implementation](#phase-2-block-implementation) which adapts building-blocks patterns for UE-serialized HTML |
+| **Step 6: Lint & Test** | **Unchanged** — use CDD as-is |
+| **Step 7: Final Validation** | **Unchanged** — use CDD as-is |
+| **Step 8: Ship It** | **Unchanged** — use CDD as-is |
+
+### When to Use This Skill
+
+- **Always** for CDD Steps 3, 4, and 5 in a crosswalk project
+- **Optionally** for Step 2 when working from a component model issue
+- For Steps 0, 1, 6, 7, 8 — follow CDD directly, no crosswalk-specific changes
+
+---
+
+## Phase 1: Component Definition
+
+This phase replaces **CDD Step 3** (Design Content Model). In crosswalk projects, the content model is a UE component definition JSON file, not a table structure.
+
+### Model-First Workflow
+
+1. **Create the component definition** (`blocks/{block-name}/_{block-name}.json`)
+2. **Update section filter** — add the block id to `models/_section.json`
+3. **Run `npm run build:json`** to regenerate merged JSON files
+4. **Push to `main`** so the UE recognizes the block
+5. **Validate in the UE** — add the block, fill fields, inspect the `.plain.html`
+
+> **Note:** Pushing the model to `main` before code means the block appears in UE but renders as raw divs. This is acceptable during development but should be communicated to the team.
+
+### Component Definition File
+
+File: `blocks/{block-name}/_{block-name}.json`
+
+Use an existing block definition as reference (e.g., `blocks/hero/_hero.json`). The file must include:
+
+- **`definitions`** array: block title, id, resourceType (`core/franklin/components/block/v1/block`), and template (with `name` and `model`/`filter`)
+- **`models`** array: field definitions for the UE properties panel
+- **`filters`** array: child component filters (empty array `[]` for standalone blocks)
+
+### Available Field Types
+
+| Field type | `component` value | Use case |
+|---|---|---|
+| Text | `text` | Single-line text (titles, labels, alt text) |
+| Rich text | `richtext` | Multi-line formatted content (descriptions, body text) |
+| Image/Asset | `reference` | Image or asset references |
+| AEM Content | `aem-content` | References to other AEM pages/fragments |
+| Select | `select` | Dropdown with predefined options |
+| Multi-select | `multiselect` | Multiple selection from options |
+| Boolean | `boolean` | Toggle/checkbox |
+| Number | `number` | Numeric values |
+| Date | `date` | Date picker |
+| Container | `container` | Section-like grouping of fields |
+
+### After Creating the Definition
+
+1. Add the block id to the section filter in `models/_section.json`
+2. Run `npm run build:json` to regenerate merged JSON files
+3. Verify the block appears in the generated `component-definition.json`, `component-models.json`, and `component-filters.json`
+
+**Without this step, authors will not be able to add the block in the Universal Editor.**
+
+---
+
+## Phase 2: Block Implementation
+
+This phase replaces **CDD Step 5** (Implement). It adapts the `building-blocks` skill patterns for crosswalk projects where HTML is serialized by the Universal Editor.
+
+### Prerequisites
+
+- ✅ Component definition exists (`_block.json`) — from Phase 1
+- ✅ Real HTML available — either from UE `.plain.html` or local test content
+- ✅ Dev server running at `http://localhost:3000`
+
+### Implementation Workflow
+
+1. **Fetch the real HTML** to understand the structure
+2. **Find similar blocks** for reference patterns
+3. **Create block files** (`{block-name}.js` and `{block-name}.css`)
+4. **Implement JavaScript decoration**
+5. **Add CSS styling**
+6. **Test across viewports**
+
+### Step 1: Fetch Real HTML
+
+Before writing any code, inspect the actual HTML delivered by the backend:
+
+```bash
+curl http://localhost:3000/{content-path}.plain.html
+```
+
+If the content page has multiple blocks, look for the `<div class="{block-name}">` section. This is the HTML your `decorate()` function will receive.
+
+**Why this matters:** UE-serialized HTML has a specific row-per-field structure (standalone blocks) or row-per-item structure (collection blocks). See [UE HTML Serialization Rules](#ue-html-serialization-rules) for details.
+
+### Step 2: Find Similar Blocks
+
+Search the codebase and Block Collection for patterns:
+
+```bash
+ls blocks/
+```
+
+Use the **block-collection-and-party** skill to find reference implementations of similar blocks.
+
+### Step 3: Create Block Files
+
+```bash
+mkdir -p blocks/{block-name}
+```
+
+Create `blocks/{block-name}/{block-name}.js`:
+```javascript
+/**
+ * decorate the block
+ * @param {Element} block the block
+ */
+export default async function decorate(block) {
+  // Decoration logic
+}
+```
+
+Create `blocks/{block-name}/{block-name}.css`:
+```css
+main .{block-name} {
+  /* Block styles */
+}
+```
+
+### Step 4: Implement JavaScript Decoration
+
+UE blocks require specific decoration patterns because of how fields are serialized.
+
+#### Standalone blocks (model-based)
+
+Each field becomes a separate row (`<div>` child of the block). Extract content by row position:
+
+```javascript
+export default async function decorate(block) {
+  const rows = [...block.children];
+
+  // Row 0: image (reference + alt collapsed into one row)
+  const picture = rows[0]?.querySelector('picture');
+
+  // Row 1: title (text field — plain text, no semantic HTML)
+  const titleText = rows[1]?.textContent?.trim();
+
+  // Row 2: description (richtext field — HTML preserved)
+  const descriptionHTML = rows[2]?.querySelector('div')?.innerHTML;
+
+  // Build semantic structure
+  const content = document.createElement('div');
+  content.className = 'block-content';
+
+  if (picture) {
+    const imageWrapper = document.createElement('div');
+    imageWrapper.className = 'block-image';
+    imageWrapper.append(picture);
+    content.append(imageWrapper);
+  }
+
+  const body = document.createElement('div');
+  body.className = 'block-body';
+
+  if (titleText) {
+    const h2 = document.createElement('h2');
+    h2.textContent = titleText;
+    body.append(h2);
+  }
+
+  if (descriptionHTML) {
+    const desc = document.createElement('div');
+    desc.innerHTML = descriptionHTML;
+    body.append(desc);
+  }
+
+  content.append(body);
+  block.replaceChildren(content);
+}
+```
+
+**Key points for standalone blocks:**
+- `text` fields → plain text inside `<div>`, no semantic HTML — you must create `<h2>`, `<p>`, etc.
+- `richtext` fields → HTML preserved inside `<div>`, can use `innerHTML`
+- `reference` (image) + `text` (alt) → collapsed into one row with `<picture>` element
+- Empty/unfilled fields → empty `<div>` rows — handle gracefully
+
+#### Collection blocks (filter-based)
+
+Each item becomes a row, each field a column within the row:
+
+```javascript
+export default async function decorate(block) {
+  const items = [...block.children];
+
+  items.forEach((item) => {
+    const columns = [...item.children];
+    // columns[0] = first field (e.g., image)
+    // columns[1] = second field (e.g., text content)
+
+    const picture = columns[0]?.querySelector('picture');
+    const textContent = columns[1];
+
+    // Decorate each item
+    item.className = 'card';
+    if (picture) columns[0].className = 'card-image';
+    if (textContent) columns[1].className = 'card-body';
+  });
+}
+```
+
+#### Handling variants
+
+Variants are applied as CSS classes on the block element. Check with `block.classList.contains()`:
+
+```javascript
+// CSS-only variants (e.g., 'image-right') — no JS needed, handle in CSS
+// JS variants (e.g., 'carousel') — need different behavior
+if (block.classList.contains('carousel')) {
+  setupCarousel(block);
+}
+```
+
+### Step 5: Add CSS Styling
+
+Follow mobile-first responsive design with block-scoped selectors:
+
+```css
+/* Mobile-first (default) */
+main .{block-name} .block-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+main .{block-name} .block-image img {
+  width: 100%;
+  height: auto;
+}
+
+main .{block-name} .block-body h2 {
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l);
+  margin: 0;
+}
+
+main .{block-name} .block-body p {
+  font-size: var(--body-font-size-m);
+  color: var(--dark-color);
+}
+
+/* Tablet and up */
+@media (width >= 600px) {
+  main .{block-name} .block-content {
+    padding: 2rem;
+  }
+}
+
+/* Desktop and up */
+@media (width >= 900px) {
+  main .{block-name} .block-content {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  main .{block-name} .block-image,
+  main .{block-name} .block-body {
+    flex: 1;
+  }
+}
+
+/* Variants — CSS-only handling */
+main .{block-name}.image-right .block-content {
+  flex-direction: row-reverse;
+}
+```
+
+**CSS guidelines:**
+- All selectors scoped to `main .{block-name}`
+- Use CSS custom properties (`var(--*)`) for colors, fonts, spacing
+- Mobile-first: default styles = mobile, add complexity with `@media (width >= Npx)`
+- Breakpoints: 600px (tablet), 900px (desktop), 1200px (wide)
+- Images: always `width: 100%; height: auto` for responsiveness
+
+### Step 6: Test Across Viewports
+
+After implementation, validate at each breakpoint:
+
+1. **Verify in browser** — open `http://localhost:3000/{content-path}` or ask the user to check
+2. **Check mobile** (< 600px), **tablet** (600–899px), **desktop** (≥ 900px)
+3. **Test variants** — apply each variant class and verify styling
+4. **Check empty fields** — ensure block doesn't break with unfilled optional fields
+5. **Run lint** — `npm run lint` (eslint + stylelint)
+
+---
 
 ## Reading Component Model Issues
 
@@ -61,54 +359,9 @@ When creating a component definition from a GitHub issue (template: "Component M
 - Using cached issue data instead of re-fetching
 - Forgetting to add `valueType: "string"` on reference/text/richtext fields
 
-## Model-First Workflow
+---
 
-For crosswalk projects, consider a **model-first** approach:
-
-1. **Create the component definition** (`_block.json`) with fields
-2. **Update section filter** and run `npm run build:json`
-3. **Push to `main`** so the UE recognizes the block
-4. **Validate in the UE** — add the block, fill fields, inspect the `.plain.html`
-5. **Implement JS/CSS** on a feature branch with the real HTML structure in hand
-
-> **Note:** Pushing the model to `main` before code means the block appears in UE but renders as raw divs. This is acceptable during development but should be communicated to the team.
-
-## UE Component Definitions
-
-When creating a new block, you **must** create a component definition file for the UE.
-
-### File: `blocks/{block-name}/_{block-name}.json`
-
-Use an existing block definition as reference (e.g., `blocks/hero/_hero.json`). The file must include:
-
-- **`definitions`** array: block title, id, resourceType (`core/franklin/components/block/v1/block`), and template (with `name` and `model`/`filter`)
-- **`models`** array: field definitions for the UE properties panel
-- **`filters`** array: child component filters (empty array `[]` for standalone blocks)
-
-### Available Field Types
-
-| Field type | `component` value | Use case |
-|---|---|---|
-| Text | `text` | Single-line text (titles, labels, alt text) |
-| Rich text | `richtext` | Multi-line formatted content (descriptions, body text) |
-| Image/Asset | `reference` | Image or asset references |
-| AEM Content | `aem-content` | References to other AEM pages/fragments |
-| Select | `select` | Dropdown with predefined options |
-| Multi-select | `multiselect` | Multiple selection from options |
-| Boolean | `boolean` | Toggle/checkbox |
-| Number | `number` | Numeric values |
-| Date | `date` | Date picker |
-| Container | `container` | Section-like grouping of fields |
-
-### After Creating the Definition
-
-1. Add the block id to the section filter in `models/_section.json`
-2. Run `npm run build:json` to regenerate merged JSON files
-3. Verify the block appears in the generated `component-definition.json`, `component-models.json`, and `component-filters.json`
-
-**Without this step, authors will not be able to add the block in the Universal Editor.**
-
-## UE HTML Serialization Rules
+## Reference: UE HTML Serialization Rules
 
 The Universal Editor serializes block content differently from document-based authoring. Understanding these rules is critical for writing correct JS decoration and local test content.
 
@@ -165,7 +418,9 @@ Because UE serializes `text` fields as plain `<div>` content (no semantic HTML),
 - Extracting and reorganizing content from the row-per-field structure
 - Handling empty rows gracefully
 
-## Creating Local Test Content for Crosswalk
+---
+
+## Reference: Creating Local Test Content for Crosswalk
 
 When creating `.plain.html` test files:
 
