@@ -208,6 +208,21 @@
         "name": "description",
         "label": "Description",
         "value": ""
+      },
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Variant",
+        "options": [
+          {
+            "name": "Image Left",
+            "value": ""
+          },
+          {
+            "name": "Image Right",
+            "value": "image-right"
+          }
+        ]
       }
     ]
   },
