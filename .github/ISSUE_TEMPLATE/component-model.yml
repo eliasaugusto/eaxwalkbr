@@ -28,77 +28,20 @@ body:
     attributes:
       label: Fields
       description: |
-        Define each field using YAML format — one block per field.
-        This format maps directly to the component definition JSON.
+        List each field the block needs. Use this format — one field per line:
 
-        **Available component types (from Adobe UE docs):**
+        `name` | `type` | `label` | `required` | `default value` | `description`
 
-        | Type | `component` value | Description |
-        |------|-------------------|-------------|
-        | Text | `text` | Single-line text input |
-        | Text Area | `textarea` | Multi-line text input |
-        | Rich Text | `richtext` | Multi-line rich text (headings, bold, links, etc.) |
-        | Number | `number` | Numeric input |
-        | Boolean | `boolean` | Toggle true/false |
-        | Date Time | `date-time` | Date and/or time picker |
-        | Reference | `reference` | AEM asset picker (images, files) |
-        | AEM Content | `aem-content` | AEM content/page picker |
-        | AEM Tag | `aem-tag` | AEM tag picker |
-        | Content Fragment | `aem-content-fragment` | Content Fragment picker |
-        | Experience Fragment | `aem-experience-fragment` | Experience Fragment picker |
-        | Select | `select` | Single selection dropdown |
-        | Multiselect | `multiselect` | Multiple selection dropdown |
-        | Checkbox Group | `checkbox-group` | Multiple checkboxes |
-        | Radio Group | `radio-group` | Mutually exclusive radio buttons |
-        | Container | `container` | Groups fields together (supports multi-field) |
-        | Tab | `tab` | Groups fields into tabs in the properties panel |
+        **Available types:** text, richtext, reference (image/asset), aem-content, select, multiselect, boolean, number, date
 
-        **Available field properties:**
-
-        | Property | Type | Description | Required |
-        |----------|------|-------------|----------|
-        | `name` | string | Property name for persistence (no underscores) | Yes |
-        | `component` | string | Component type from table above | Yes |
-        | `label` | string | Display label in the UE panel | Yes |
-        | `description` | string | Help text shown below the field | No |
-        | `value` | any | Default value / placeholder | No |
-        | `valueType` | string | `string`, `string[]`, `number`, `date`, `boolean` | No |
-        | `required` | boolean | Whether field is required | No |
-        | `readOnly` | boolean | Whether field is read-only | No |
-        | `hidden` | boolean | Whether field is hidden by default | No |
-        | `multi` | boolean | Enable multi-field (repeatable values) | No |
-        | `options` | array | For select/multiselect/checkbox-group/radio-group | No |
-        | `validation` | object | Validation rules (type-specific) | No |
-
-        **Field collapse naming conventions** (fields are merged into one semantic element):
-        - `image` + `imageAlt` → `<picture><img alt="..."></picture>`
-        - `link` + `linkText` + `linkTitle` + `linkType` → `<a href="...">`
-        - `heading` + `headingType` → `<h1>`...`<h6>`
-
-        **Element grouping** (fields concatenated into one cell):
-        - Use prefix: `groupName_fieldName` (e.g. `teaserText_title`, `teaserText_description`)
+        For **select/multiselect**, add options in the description column like: `Option A, Option B, Option C`
       value: |
-        ```yaml
-        - name: image
-          type: reference
-          label: Image
-          required: true
-
-        - name: imageAlt
-          type: text
-          label: Alt Text
-          required: false
-
-        - name: title
-          type: text
-          label: Title
-          required: true
-
-        - name: description
-          type: richtext
-          label: Description
-          required: false
-        ```
+        | Name | Type | Label | Required | Default | Description |
+        |------|------|-------|----------|---------|-------------|
+        | image | reference | Image | yes | | Block image |
+        | imageAlt | text | Alt Text | no | | Alternative text for the image |
+        | title | text | Title | yes | | Block title |
+        | description | richtext | Description | no | | Block description |
     validations:
       required: true
 
@@ -107,36 +50,24 @@ body:
     attributes:
       label: Child Item Fields (Collection blocks only)
       description: |
-        If this is a collection block, define the fields for each repeatable child item using the same YAML format above.
+        If this is a collection block, define the fields for each repeatable child item using the same format above.
       placeholder: |
-        ```yaml
-        - name: image
-          type: reference
-          label: Image
-          required: true
-
-        - name: text
-          type: richtext
-          label: Text
-          required: false
-        ```
+        | Name | Type | Label | Required | Default | Description |
+        |------|------|-------|----------|---------|-------------|
+        | image | reference | Image | yes | | Card image |
+        | text | richtext | Text | no | | Card content |
 
   - type: textarea
     id: variants
     attributes:
       label: Variants / Options
       description: |
-        List variants using YAML format. Each variant becomes a CSS class on the block.
-        The first entry with an empty `value` is the default.
+        List any visual or behavioral variants this block should support (applied via CSS classes).
       placeholder: |
-        ```yaml
-        - name: Default
-          value: ""
-        - name: Dark
-          value: dark
-        - name: Wide
-          value: wide
-        ```
+        e.g.
+        - dark: Dark background with light text
+        - wide: Full-width layout
+        - centered: Center-aligned content
 
   - type: textarea
     id: description
