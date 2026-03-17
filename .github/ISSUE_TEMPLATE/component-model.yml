@@ -61,10 +61,9 @@ body:
         List variants, one per line: `display name, css-class`
         The first entry with an empty class is the default.
       placeholder: |
-        e.g.
-        - dark: Dark background with light text
-        - wide: Full-width layout
-        - centered: Center-aligned content
+        Image Left,
+        Image Right, image-right
+        Dark, dark
 
   - type: textarea
     id: description
