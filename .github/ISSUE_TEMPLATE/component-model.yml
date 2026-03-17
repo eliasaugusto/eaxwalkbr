@@ -28,18 +28,34 @@ body:
     attributes:
       label: Fields
       description: |
-        List each field, one per line, using this format:
-
-        `name, type, label, required`
+        Define each field using YAML format — one block per field.
+        This format maps directly to the component definition JSON.
 
         **Available types:** text, textarea, richtext, number, boolean, date-time, reference, aem-content, aem-tag, aem-content-fragment, aem-experience-fragment, select, multiselect, checkbox-group, radio-group, container
 
-        For **select/multiselect**, add options after a `>` like: `style, select, Style, no > Option A, Option B`
+        For **select/multiselect**, add an `options` list.
       value: |
-        image, reference, Image, yes
-        imageAlt, text, Alt Text, no
-        title, text, Title, yes
-        description, richtext, Description, no
+        ```yaml
+        - name: image
+          type: reference
+          label: Image
+          required: true
+
+        - name: imageAlt
+          type: text
+          label: Alt Text
+          required: false
+
+        - name: title
+          type: text
+          label: Title
+          required: true
+
+        - name: description
+          type: richtext
+          label: Description
+          required: false
+        ```
     validations:
       required: true
 
@@ -48,22 +64,36 @@ body:
     attributes:
       label: Child Item Fields (Collection blocks only)
       description: |
-        If this is a collection block, define the fields for each repeatable child item using the same format above.
+        If this is a collection block, define the fields for each repeatable child item using the same YAML format above.
       placeholder: |
-        image, reference, Image, yes
-        text, richtext, Text, no
+        ```yaml
+        - name: image
+          type: reference
+          label: Image
+          required: true
+
+        - name: text
+          type: richtext
+          label: Text
+          required: false
+        ```
 
   - type: textarea
     id: variants
     attributes:
       label: Variants / Options
       description: |
-        List variants, one per line: `display name, css-class`
-        The first entry with an empty class is the default.
+        List variants using YAML format. Each variant becomes a CSS class on the block.
+        The first entry with an empty `value` is the default.
       placeholder: |
-        Image Left,
-        Image Right, image-right
-        Dark, dark
+        ```yaml
+        - name: Default
+          value: ""
+        - name: Dark
+          value: dark
+        - name: Wide
+          value: wide
+        ```
 
   - type: textarea
     id: description
