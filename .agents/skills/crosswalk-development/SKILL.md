@@ -21,10 +21,10 @@ This skill **complements** the Adobe `content-driven-development` (CDD) skill. C
 |---|---|
 | **Step 0: Create TodoList** | **Unchanged** — use CDD as-is |
 | **Step 1: Start Dev Server** | **Unchanged** — use CDD as-is |
-| **Step 2: Analyze & Plan** | **Supplemented** — invoke analyze-and-plan skill as normal, but also use [Reading Component Model Issues](#reading-component-model-issues) when working from a GitHub issue |
-| **Step 3: Design Content Model** | **Replaced** — instead of designing a table structure, follow [Phase 1: Component Definition](#phase-1-component-definition) to create the UE `_block.json` file |
-| **Step 4: Identify/Create Test Content** | **Replaced** — push model to `main`, create content in the UE, then inspect `.plain.html` for real HTML. Alternatively, create local `.plain.html` test files using [Creating Local Test Content](#creating-local-test-content-for-crosswalk) |
-| **Step 5: Implement** | **Replaced** — instead of invoking building-blocks directly, follow [Phase 2: Block Implementation](#phase-2-block-implementation) which adapts building-blocks patterns for UE-serialized HTML |
+| **Step 2: Analyze & Plan** | **Supplemented** — invoke analyze-and-plan skill as normal, but also use the **Reading Component Model Issues** section below when working from a GitHub issue |
+| **Step 3: Design Content Model** | **Replaced** — instead of designing a table structure, follow **Phase 1: Component Definition** below to create the UE `_block.json` file |
+| **Step 4: Identify/Create Test Content** | **Replaced** — push model to `main`, create content in the UE, then inspect `.plain.html` for real HTML. Alternatively, create local `.plain.html` test files using the **Creating Local Test Content for Crosswalk** section below |
+| **Step 5: Implement** | **Replaced** — instead of invoking building-blocks directly, follow **Phase 2: Block Implementation** below which adapts building-blocks patterns for UE-serialized HTML |
 | **Step 6: Lint & Test** | **Unchanged** — use CDD as-is |
 | **Step 7: Final Validation** | **Unchanged** — use CDD as-is |
 | **Step 8: Ship It** | **Unchanged** — use CDD as-is |
@@ -115,7 +115,7 @@ curl http://localhost:3000/{content-path}.plain.html
 
 If the content page has multiple blocks, look for the `<div class="{block-name}">` section. This is the HTML your `decorate()` function will receive.
 
-**Why this matters:** UE-serialized HTML has a specific row-per-field structure (standalone blocks) or row-per-item structure (collection blocks). See [UE HTML Serialization Rules](#ue-html-serialization-rules) for details.
+**Why this matters:** UE-serialized HTML has a specific row-per-field structure (standalone blocks) or row-per-item structure (collection blocks). See the **UE HTML Serialization Rules** section below for details.
 
 ### Step 2: Find Similar Blocks
 
