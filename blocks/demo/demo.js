@@ -1,13 +1,14 @@
 export default function decorate(block) {
-  const picture = block.querySelector('picture');
   const rows = [...block.children];
 
-  const textContent = rows
-    .filter((row) => !row.querySelector('picture'))
-    .map((row) => row.textContent.trim())
-    .filter(Boolean);
+  // Row 0: image (reference + imageAlt collapsed)
+  const picture = rows[0]?.querySelector('picture');
 
-  const [title, ...descParts] = textContent;
+  // Row 1: title (text field — plain text, no semantic HTML)
+  const titleText = rows[1]?.textContent?.trim();
+
+  // Row 2: description (richtext field — HTML preserved)
+  const descriptionDiv = rows[2]?.querySelector('div');
 
   const wrapper = document.createElement('div');
   wrapper.className = 'demo-content';
@@ -22,16 +23,17 @@ export default function decorate(block) {
   const body = document.createElement('div');
   body.className = 'demo-body';
 
-  if (title) {
+  if (titleText) {
     const h2 = document.createElement('h2');
-    h2.textContent = title;
+    h2.textContent = titleText;
     body.append(h2);
   }
 
-  if (descParts.length) {
-    const p = document.createElement('p');
-    p.textContent = descParts.join(' ');
-    body.append(p);
+  if (descriptionDiv?.innerHTML?.trim()) {
+    const desc = document.createElement('div');
+    desc.className = 'demo-description';
+    desc.innerHTML = descriptionDiv.innerHTML;
+    body.append(desc);
   }
 
   wrapper.append(body);
