@@ -1,0 +1,67 @@
+name: Block Implementation
+description: Implement JS/CSS for a block that already has a component model definition
+title: "[Block] "
+labels: ["block-implementation"]
+body:
+  - type: input
+    id: block-name
+    attributes:
+      label: Block Name
+      description: The block identifier (must match the model definition).
+      placeholder: e.g. hero, demo, testimonial
+    validations:
+      required: true
+
+  - type: input
+    id: model-issue
+    attributes:
+      label: Model Issue
+      description: Link to the component model issue (e.g. #19).
+      placeholder: "#19"
+    validations:
+      required: true
+
+  - type: textarea
+    id: content-urls
+    attributes:
+      label: Content URLs
+      description: |
+        Pages where the block has been authored in the Universal Editor.
+        These will be used to fetch the real HTML structure and test the implementation.
+      placeholder: |
+        /components
+        /about
+    validations:
+      required: true
+
+  - type: textarea
+    id: design
+    attributes:
+      label: Design / Visual Requirements
+      description: |
+        Describe how the block should look and behave.
+        Attach mockups, screenshots, or Figma links if available.
+      placeholder: |
+        - Image and text side by side on desktop
+        - Stacked on mobile
+        - image-right variant reverses the order
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: |
+        What must be true for this implementation to be complete?
+      value: |
+        - [ ] Block renders correctly with UE content
+        - [ ] All variants work as expected
+        - [ ] Responsive: mobile, tablet, desktop
+        - [ ] No console errors
+        - [ ] Lint passes
+        - [ ] PR created with preview link
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Any extra notes, edge cases, or references.
