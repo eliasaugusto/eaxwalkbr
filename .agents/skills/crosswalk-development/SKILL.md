@@ -20,6 +20,47 @@ This skill provides project-specific guidance for AEM Edge Delivery Services cro
 
 Check if `models/_component-definition.json` exists in the project root. If it does, this is a crosswalk project.
 
+## Reading Component Model Issues
+
+When creating a component definition from a GitHub issue (template: "Component Model Definition"), follow this checklist to avoid missing properties:
+
+### Parsing Checklist
+
+1. **Always re-fetch the issue** before starting — never rely on cached/previous reads
+2. **Block Name** → used for directory name, file name, definition id, model id, and template name
+3. **Block Type** → determines if the block uses `model` (standalone) or `filter` (collection)
+4. **Fields** — for each field, extract ALL properties:
+   - `name` → `"name"` in JSON
+   - `type` → `"component"` in JSON (map: reference, text, richtext, aem-content, select, etc.)
+   - `label` → `"label"` in JSON
+   - `required` → if `true`, add `"required": true` to the field
+   - `default` → if present, add `"value"` to the field
+   - For `reference` type: add `"valueType": "string"` and `"multi": false`
+   - For `text` type: add `"valueType": "string"`
+   - For `richtext` type: add `"valueType": "string"`
+5. **Child Item Fields** → only for collection blocks, defines child component model
+6. **Variants** — if present, add a `classes` field:
+   ```json
+   {
+     "component": "select",
+     "name": "classes",
+     "label": "Variant",
+     "options": [
+       { "name": "Display Name", "value": "" },
+       { "name": "Variant Name", "value": "css-class" }
+     ]
+   }
+   ```
+   The first option with empty `value` is the default.
+7. **Verify** the generated JSON contains every field, every `required`, and every variant from the issue
+
+### Common Mistakes to Avoid
+
+- Missing `required: true` on fields marked as required
+- Missing variants when the issue specifies them
+- Using cached issue data instead of re-fetching
+- Forgetting to add `valueType: "string"` on reference/text/richtext fields
+
 ## Model-First Workflow
 
 For crosswalk projects, consider a **model-first** approach:

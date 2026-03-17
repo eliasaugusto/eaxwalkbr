@@ -28,20 +28,34 @@ body:
     attributes:
       label: Fields
       description: |
-        List each field the block needs. Use this format — one field per line:
-
-        `name` | `type` | `label` | `required` | `default value` | `description`
+        Define each field using YAML format — one block per field.
+        This format maps directly to the component definition JSON.
 
         **Available types:** text, richtext, reference (image/asset), aem-content, select, multiselect, boolean, number, date
 
-        For **select/multiselect**, add options in the description column like: `Option A, Option B, Option C`
+        For **select/multiselect**, add an `options` list.
       value: |
-        | Name | Type | Label | Required | Default | Description |
-        |------|------|-------|----------|---------|-------------|
-        | image | reference | Image | yes | | Block image |
-        | imageAlt | text | Alt Text | no | | Alternative text for the image |
-        | title | text | Title | yes | | Block title |
-        | description | richtext | Description | no | | Block description |
+        ```yaml
+        - name: image
+          type: reference
+          label: Image
+          required: true
+
+        - name: imageAlt
+          type: text
+          label: Alt Text
+          required: false
+
+        - name: title
+          type: text
+          label: Title
+          required: true
+
+        - name: description
+          type: richtext
+          label: Description
+          required: false
+        ```
     validations:
       required: true
 
@@ -50,24 +64,36 @@ body:
     attributes:
       label: Child Item Fields (Collection blocks only)
       description: |
-        If this is a collection block, define the fields for each repeatable child item using the same format above.
+        If this is a collection block, define the fields for each repeatable child item using the same YAML format above.
       placeholder: |
-        | Name | Type | Label | Required | Default | Description |
-        |------|------|-------|----------|---------|-------------|
-        | image | reference | Image | yes | | Card image |
-        | text | richtext | Text | no | | Card content |
+        ```yaml
+        - name: image
+          type: reference
+          label: Image
+          required: true
+
+        - name: text
+          type: richtext
+          label: Text
+          required: false
+        ```
 
   - type: textarea
     id: variants
     attributes:
       label: Variants / Options
       description: |
-        List any visual or behavioral variants this block should support (applied via CSS classes).
+        List variants using YAML format. Each variant becomes a CSS class on the block.
+        The first entry with an empty `value` is the default.
       placeholder: |
-        e.g.
-        - dark: Dark background with light text
-        - wide: Full-width layout
-        - centered: Center-aligned content
+        ```yaml
+        - name: Default
+          value: ""
+        - name: Dark
+          value: dark
+        - name: Wide
+          value: wide
+        ```
 
   - type: textarea
     id: description
