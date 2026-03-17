@@ -1,0 +1,76 @@
+name: Component Model Definition
+description: Define the content model for a new or modified UE block
+title: "[Model] "
+labels: ["component-model"]
+body:
+  - type: input
+    id: block-name
+    attributes:
+      label: Block Name
+      description: The block identifier (lowercase, no spaces). Used for directory and file naming.
+      placeholder: e.g. hero, cards, testimonial
+    validations:
+      required: true
+
+  - type: dropdown
+    id: block-type
+    attributes:
+      label: Block Type
+      description: Standalone blocks have a single instance per use. Collection blocks contain repeatable child items (e.g. cards).
+      options:
+        - Standalone (model-based)
+        - Collection (filter-based)
+    validations:
+      required: true
+
+  - type: textarea
+    id: fields
+    attributes:
+      label: Fields
+      description: |
+        List each field the block needs. Use this format — one field per line:
+
+        `name` | `type` | `label` | `required` | `default value` | `description`
+
+        **Available types:** text, richtext, reference (image/asset), aem-content, select, multiselect, boolean, number, date
+
+        For **select/multiselect**, add options in the description column like: `Option A, Option B, Option C`
+      value: |
+        | Name | Type | Label | Required | Default | Description |
+        |------|------|-------|----------|---------|-------------|
+        | image | reference | Image | yes | | Block image |
+        | imageAlt | text | Alt Text | no | | Alternative text for the image |
+        | title | text | Title | yes | | Block title |
+        | description | richtext | Description | no | | Block description |
+    validations:
+      required: true
+
+  - type: textarea
+    id: child-fields
+    attributes:
+      label: Child Item Fields (Collection blocks only)
+      description: |
+        If this is a collection block, define the fields for each repeatable child item using the same format above.
+      placeholder: |
+        | Name | Type | Label | Required | Default | Description |
+        |------|------|-------|----------|---------|-------------|
+        | image | reference | Image | yes | | Card image |
+        | text | richtext | Text | no | | Card content |
+
+  - type: textarea
+    id: variants
+    attributes:
+      label: Variants / Options
+      description: |
+        List any visual or behavioral variants this block should support (applied via CSS classes).
+      placeholder: |
+        e.g.
+        - dark: Dark background with light text
+        - wide: Full-width layout
+        - centered: Center-aligned content
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Additional Context
+      description: Any mockups, screenshots, design references, or notes about expected behavior.
