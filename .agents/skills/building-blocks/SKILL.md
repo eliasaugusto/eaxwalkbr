@@ -103,6 +103,24 @@ Track your progress:
    }
    ```
 
+4. **Universal Editor component definition (REQUIRED for crosswalk/xwalk projects):**
+
+   **How to detect:** Check if `models/_component-definition.json` exists in the project root. If it does, this is a crosswalk project and you MUST create a component definition file.
+
+   Create `blocks/{block-name}/_{block-name}.json` with definitions, models, and filters. Use an existing block definition (e.g., `blocks/hero/_hero.json`) as a reference for the structure.
+
+   The file must include:
+   - `definitions` array: block title, id, resourceType, and template (with name and model/filter)
+   - `models` array: field definitions for the Universal Editor properties panel (reference for images, text for strings, richtext for rich content, select for dropdowns)
+   - `filters` array: child component filters if the block has sub-items (empty array for standalone blocks)
+
+   After creating the file, you must also:
+   - Add the block id to the section filter in `models/_section.json` so authors can add it to sections
+   - Run `npm run build:json` to regenerate the merged `component-definition.json`, `component-models.json`, and `component-filters.json`
+   - Verify the block appears in the generated files
+
+   **Without this step, authors will not be able to add the block in the Universal Editor.**
+
 ### For Existing Blocks:
 
 1. Locate the block directory: `blocks/{block-name}/`
