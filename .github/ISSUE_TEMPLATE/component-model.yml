@@ -31,9 +31,52 @@ body:
         Define each field using YAML format — one block per field.
         This format maps directly to the component definition JSON.
 
-        **Available types:** text, richtext, reference (image/asset), aem-content, select, multiselect, boolean, number, date
+        **Available component types (from Adobe UE docs):**
 
-        For **select/multiselect**, add an `options` list.
+        | Type | `component` value | Description |
+        |------|-------------------|-------------|
+        | Text | `text` | Single-line text input |
+        | Text Area | `textarea` | Multi-line text input |
+        | Rich Text | `richtext` | Multi-line rich text (headings, bold, links, etc.) |
+        | Number | `number` | Numeric input |
+        | Boolean | `boolean` | Toggle true/false |
+        | Date Time | `date-time` | Date and/or time picker |
+        | Reference | `reference` | AEM asset picker (images, files) |
+        | AEM Content | `aem-content` | AEM content/page picker |
+        | AEM Tag | `aem-tag` | AEM tag picker |
+        | Content Fragment | `aem-content-fragment` | Content Fragment picker |
+        | Experience Fragment | `aem-experience-fragment` | Experience Fragment picker |
+        | Select | `select` | Single selection dropdown |
+        | Multiselect | `multiselect` | Multiple selection dropdown |
+        | Checkbox Group | `checkbox-group` | Multiple checkboxes |
+        | Radio Group | `radio-group` | Mutually exclusive radio buttons |
+        | Container | `container` | Groups fields together (supports multi-field) |
+        | Tab | `tab` | Groups fields into tabs in the properties panel |
+
+        **Available field properties:**
+
+        | Property | Type | Description | Required |
+        |----------|------|-------------|----------|
+        | `name` | string | Property name for persistence (no underscores) | Yes |
+        | `component` | string | Component type from table above | Yes |
+        | `label` | string | Display label in the UE panel | Yes |
+        | `description` | string | Help text shown below the field | No |
+        | `value` | any | Default value / placeholder | No |
+        | `valueType` | string | `string`, `string[]`, `number`, `date`, `boolean` | No |
+        | `required` | boolean | Whether field is required | No |
+        | `readOnly` | boolean | Whether field is read-only | No |
+        | `hidden` | boolean | Whether field is hidden by default | No |
+        | `multi` | boolean | Enable multi-field (repeatable values) | No |
+        | `options` | array | For select/multiselect/checkbox-group/radio-group | No |
+        | `validation` | object | Validation rules (type-specific) | No |
+
+        **Field collapse naming conventions** (fields are merged into one semantic element):
+        - `image` + `imageAlt` → `<picture><img alt="..."></picture>`
+        - `link` + `linkText` + `linkTitle` + `linkType` → `<a href="...">`
+        - `heading` + `headingType` → `<h1>`...`<h6>`
+
+        **Element grouping** (fields concatenated into one cell):
+        - Use prefix: `groupName_fieldName` (e.g. `teaserText_title`, `teaserText_description`)
       value: |
         ```yaml
         - name: image
