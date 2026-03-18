@@ -263,5 +263,24 @@
         "valueType": "string"
       }
     ]
+  },
+  {
+    "id": "language-switcher-item",
+    "fields": [
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "label",
+        "label": "Language Label",
+        "required": true
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "prefix",
+        "label": "URL Prefix",
+        "required": true
+      }
+    ]
   }
 ]

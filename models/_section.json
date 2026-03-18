@@ -51,7 +51,8 @@
         "cards",
         "columns",
         "fragment",
-        "demo"
+        "demo",
+        "language-switcher"
       ]
     }
   ]
