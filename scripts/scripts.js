@@ -47,6 +47,16 @@ export function moveInstrumentation(from, to) {
 }
 
 /**
+ * Returns the language prefix from the current URL path (e.g. '/en-us', '/pt-br').
+ * @returns {string} The language prefix or empty string if none
+ */
+export function getLanguagePrefix() {
+  const [, segment] = window.location.pathname.split('/');
+  if (segment && /^[a-z]{2}(-[a-z]{2})?$/.test(segment)) return `/${segment}`;
+  return '';
+}
+
+/**
  * load fonts.css and set a session storage flag
  */
 async function loadFonts() {
