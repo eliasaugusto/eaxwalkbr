@@ -1,6 +1,7 @@
 {
   "mappings": [
-    "/content/eaxwalkbr/:/"
+    "/content/eaxwalkbr/:/",
+    "/content/eaxwalkbr/redirects:/redirects.json"
   ],
   "includes": [
     "/content/eaxwalkbr/"
