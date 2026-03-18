@@ -18,6 +18,12 @@ function getLanguageUrl(targetPrefix) {
  * @param {Element} block The language-switcher block element
  */
 export default async function decorate(block) {
+  // Skip decoration in Universal Editor to preserve authoring instrumentation
+  if (window.location.origin.includes('.aem.live/universal-editor')
+    || document.querySelector('html[data-aue-edit]')) {
+    return;
+  }
+
   const currentPrefix = getLanguagePrefix();
   const items = [...block.children];
 
