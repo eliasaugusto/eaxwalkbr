@@ -1,4 +1,4 @@
-import { getLanguagePrefix } from '../../scripts/scripts.js';
+import { getLanguagePrefix, moveInstrumentation } from '../../scripts/scripts.js';
 
 /**
  * Builds the language URL by replacing the current prefix with the target prefix.
@@ -18,12 +18,6 @@ function getLanguageUrl(targetPrefix) {
  * @param {Element} block The language-switcher block element
  */
 export default async function decorate(block) {
-  // Skip decoration in Universal Editor to preserve authoring instrumentation
-  if (window.location.origin.includes('.aem.live/universal-editor')
-    || document.querySelector('html[data-aue-edit]')) {
-    return;
-  }
-
   const currentPrefix = getLanguagePrefix();
   const items = [...block.children];
 
@@ -33,12 +27,15 @@ export default async function decorate(block) {
     const label = cols[0]?.textContent?.trim();
     const link = cols[1]?.querySelector('a');
     const prefix = link ? new URL(link.href, window.location).pathname.replace(/\/$/, '') : cols[1]?.textContent?.trim();
-    return { label, prefix };
+    return { label, prefix, originalItem: item };
   }).filter(({ label, prefix }) => label && prefix);
 
   // Build dropdown
   const wrapper = document.createElement('div');
   wrapper.className = 'language-switcher-wrapper';
+
+  // Preserve UE instrumentation from block to wrapper
+  moveInstrumentation(block, wrapper);
 
   const button = document.createElement('button');
   button.className = 'language-switcher-toggle';
@@ -56,6 +53,10 @@ export default async function decorate(block) {
   languages.forEach((lang) => {
     const li = document.createElement('li');
     li.setAttribute('role', 'option');
+
+    // Preserve UE instrumentation from each item row to the li
+    moveInstrumentation(lang.originalItem, li);
+
     const isCurrent = lang.prefix === currentPrefix;
     if (isCurrent) {
       li.setAttribute('aria-selected', 'true');
