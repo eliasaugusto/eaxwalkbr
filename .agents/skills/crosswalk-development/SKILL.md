@@ -245,6 +245,43 @@ if (block.classList.contains('carousel')) {
 }
 ```
 
+#### Preserving Universal Editor Instrumentation
+
+When a block's `decorate()` function restructures the DOM (replacing children, creating new elements), the Universal Editor loses its connection to the content — authors can no longer add, edit, or delete items in the UE.
+
+**Rule:** If you move or replace DOM elements that have `data-aue-*` attributes, you **must** use `moveInstrumentation()` from `scripts.js` to transfer those attributes to the new elements.
+
+```javascript
+import { moveInstrumentation } from '../../scripts/scripts.js';
+
+export default async function decorate(block) {
+  const items = [...block.children];
+
+  const ul = document.createElement('ul');
+  items.forEach((item) => {
+    const li = document.createElement('li');
+    // Transfer UE instrumentation from original div to new li
+    moveInstrumentation(item, li);
+    li.append(...item.childNodes);
+    ul.append(li);
+  });
+
+  block.replaceChildren(ul);
+}
+```
+
+**When to use:**
+- `block.replaceChildren(...)` — move instrumentation from block to the new wrapper
+- Creating new elements to replace rows/items — move from original row to new element
+- Any DOM restructuring that changes the element hierarchy
+
+**When NOT needed:**
+- Adding CSS classes to existing elements (no DOM restructuring)
+- Appending new child elements without removing originals
+- CSS-only changes
+
+**Reference:** See `blocks/cards/cards.js` for a complete example from the boilerplate.
+
 ### Step 5: Add CSS Styling
 
 Follow mobile-first responsive design with block-scoped selectors:
