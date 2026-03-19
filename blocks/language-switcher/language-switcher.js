@@ -26,7 +26,9 @@ export default async function decorate(block) {
     const cols = [...item.children];
     const label = cols[0]?.textContent?.trim();
     const link = cols[1]?.querySelector('a');
-    const prefix = link ? new URL(link.href, window.location).pathname.replace(/\/$/, '') : cols[1]?.textContent?.trim();
+    let prefix = link ? new URL(link.href, window.location).pathname.replace(/\/$/, '') : cols[1]?.textContent?.trim();
+    // Normalise: ensure prefix always starts with /
+    if (prefix && !prefix.startsWith('/')) prefix = `/${prefix}`;
     return { label, prefix, originalItem: item };
   }).filter(({ label, prefix }) => label && prefix);
 
