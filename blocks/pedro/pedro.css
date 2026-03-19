@@ -1,0 +1,39 @@
+/* Mobile-first (default) — stacked: body on top, image below */
+.pedro .pedro-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.pedro .pedro-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.pedro .pedro-body h2 {
+  font-family: var(--heading-font-family);
+  font-size: var(--heading-font-size-l);
+  margin: 0 0 0.5rem;
+}
+
+.pedro .pedro-description {
+  font-size: var(--body-font-size-m);
+  color: var(--dark-color);
+}
+
+/* Desktop — text left, image right */
+@media (width >= 900px) {
+  .pedro .pedro-content {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .pedro .pedro-body {
+    flex: 1;
+  }
+
+  .pedro .pedro-image {
+    flex: 1;
+  }
+}
